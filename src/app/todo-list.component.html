@@ -1,0 +1,127 @@
+<div class="todo-content">
+
+  <h1 class="page-title title is-1">ToDos </h1>
+
+
+  <div class="container is-fluid box">
+    <h4 class="title is-4">Apply Filter</h4>
+    <form #todoFilter="ngForm" (change)="getTodosWithFilter(todoFilter.value)" novalidate>
+      <div class="field">
+        <label for="fromDate" class="label">From Date</label>
+        <p-calendar [(ngModel)]="todoFilter.fromDate" id="fromDate" #fromDate="ngModel" name="fromDate" [inputStyle]="{'width':'400px'}" inputStyleClass="control input is-primary"
+          [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field">
+        <label for="fromDate" class="label">To Date</label>
+        <p-calendar [(ngModel)]="todoFilter.toDate" name="toDate" id="toDate" #toDate="ngModel" [inputStyle]="{'width':'400px'}" inputStyleClass="control input is-primary"
+          [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field">
+        <label for="title" class="label">Search With Title</label>
+        <input [(ngModel)]="todoFilter.title" name="title" id="title" #title="ngModel" class="control input is-primary" />
+      </div>
+      <button type="button" (click)="getTodosWithFilter(todoFilter.value)" class="button">Filter<i class="fa fa-filter"></i></button>
+    </form>
+  </div>
+
+  <div class="container is-fluid">
+    <form #todoForm="ngForm" (ngSubmit)="createTodo(todoForm)" novalidate>
+      <div class="field">
+        <label for="title" class="label">Enter Title</label>
+        <input type="text" id="title" class="control input is-primary" placeholder="Type a todo and press enter..." required name="title"
+          [(ngModel)]="newTodo.title" #title="ngModel">
+      </div>
+
+      <div *ngIf="title.errors && title.dirty" class="alert alert-danger">
+        <div [hidden]="!title.errors.required">
+          Title is required.
+        </div>
+      </div>
+    </form>
+  </div>
+
+<div class="container is-fluid box">
+    <h4 class="title is-4">Results</h4>
+  <ul class="todo-list">
+
+    <li *ngFor="let todo of todos" [class.completed]="todos !== null && todo.completed === true">
+      <div class="todo-row" *ngIf="!editing || editingTodo.id != todo.id">
+        <a class="todo-completed" (click)="toggleCompleted(todo)">
+          <i class="material-icons toggle-completed-checkbox"></i>
+        </a>
+        <span class="todo-title">
+              {{todo.title}}  
+            </span>
+        <span class="todo-date">
+              <P> Created On: {{todo.createdAt}} </P>
+            </span>
+        <span class="todo-actions">
+                <a (click)="editTodo(todo)">
+                  <i class="material-icons edit">edit</i>
+                </a>
+                <a (click)="deleteTodo(todo.id)">
+                  <i class="material-icons delete">clear</i>
+                </a>
+            </span>
+      </div>
+      <div class="todo-edit" *ngIf="editing && editingTodo.id === todo.id">
+        <input class="control" type="text" [(ngModel)]="editingTodo.title" required>
+        <span class="edit-actions">
+                <a (click)="updateTodo(editingTodo)">
+                  <i class="material-icons">done</i>
+                </a>
+                <a (click)="clearEditing()">
+                  <i class="material-icons">clear</i>
+                </a>
+            </span>
+      </div>
+    </li>
+  </ul>
+</div>
+  <div class="no-todos" *ngIf="todos?.length == 0">
+    <p>No Todos Found!</p>
+  </div>
+  <footer class="footer" *ngIf="todos?.length > 0">
+    <nav class="panel">
+      <p class="panel-heading">
+        Statistics
+      </p>
+      <a class="panel-block is-active">
+        <div class="columns">
+          <div class="column is-half">
+            <span>
+            Total
+            </span>
+          </div>
+          <div class="column is-half">
+            <span><strong>  {{todos.length}}</strong></span>
+          </div>
+        </div>
+      </a>
+      <a class="panel-block is-active">
+        <div class="columns">
+          <div class="column">
+            <span>
+            Completed
+            </span>
+          </div>
+          <div class="column">
+            <span><strong>  {{completedCount}}</strong></span>
+          </div>
+        </div>
+      </a>
+      <a class="panel-block is-active">
+        <div class="columns">
+          <div class="column">
+            <span>
+            Remaining
+            </span>
+          </div>
+          <div class="column">
+            <span><strong>  {{todos.length-completedCount}}</strong></span>
+          </div>
+        </div>
+      </a>
+    </nav>
+  </footer>
+</div>
