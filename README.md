@@ -29,7 +29,7 @@ v8.11.3
 > ng update @angular/core
 
 If you encounter angualr version conflicts, please run the below command.
-ng update @angular/core --next --force
+> ng update @angular/core --next --force
 
 6) Try to run serve comman again.
 > ng serve
